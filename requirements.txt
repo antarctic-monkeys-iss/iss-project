@@ -18,7 +18,7 @@ pycparser==2.21
 PyJWT==2.8.0
 SQLAlchemy==2.0.28
 sqlalchemy-cockroachdb==2.0.2
-TBB @ file:///private/tmp/tbb-20231202-4800-tiu1mu/oneTBB-2021.11.0/python
+TBB
 typing_extensions==4.10.0
 Werkzeug==3.0.1
-wheel @ file:///opt/homebrew/Cellar/python%403.12/3.12.2_1/libexec/wheel-0.42.0-py3-none-any.whl#sha256=5f1ca525bef7466225922019d72cb06a9e91cd3ff807ddd4be1acb84655e5107
+wheel
