@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antarctic Monkeys</title>
+  <link rel="icon" type="image/x-icon" href="images/icon.ico">
+  <link rel="stylesheet" href="static/css/styles.css">
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <div class="navbar-brand">
+        <a href="#">
+          <img src="../static/assets/logo.png" alt="Icon">
+        </a>
+        <span>Antarctic Monkeys</span>
+      </div>
+      <ul class="nav-options">
+        <li><a href="#dropzone">Photo Upload</a></li>
+        <li><a href="#videoPreview">Video Conversion</a></li>
+        <li><a href="#musicDropbox">Music Upload</a></li>
+        <li><a href="/signout">Sign Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <h2>Photo Upload</h2>
+  <div class="dropzone" id="dropzone">
+      <div class="centered-rectangle">
+        <img src="../static/assets/upload.png">
+      </div>
+      <p>Drag and drop images here or click to upload.</p>
+      <input type="file" id="fileInput" multiple>
+    </div>
+    <div class="uploaded-images" id="uploaded-images"></div>
+
+    <br>
+
+    <button onclick="selectAll()">Select All</button>
+    <button onclick="unselectAll()">Unselect All</button>
+    <button onclick="uploadImages()">Upload</button>
+    <button onclick="removeImages()">Clear Selected</button>
+
+    <h2>Gallery</h2>
+    <div class="gallery-container">
+      {% if zipped_image_data %}
+          {% for image in zipped_image_data %}
+              <div class="gallery-item">
+                  <img class="gallery-img" src="data:image/jpeg;base64,{{ image[0] }}" alt="{{ image[1] }}">
+              </div>
+          {% endfor %}
+      {% else %}
+          <p>{{ image_error }}</p>
+      {% endif %}
+    </div>   
+
+    <button onclick="RemoveImagesFromGallery()"">Remove Images</button>
+  
+  </div>
+
+  <br>
+  <h2>Background Music</h2>
+  <div class="dropzone" id="musicDropbox">
+    <div class="centered-rectangle">
+      <img src="../static/assets/audupload.png">
+    </div>
+    <p>Drag and drop music files here or click to upload.</p>
+    <input type="file" id="musicUpload" accept="audio/*">
+  </div>
+
+  <h3>Available Songs</h2>
+    <table id="uploadedMusic">
+      <thead>
+        <tr>
+          <th>Song Name</th>
+        </tr>
+        
+      </thead>
+      <tbody>
+        <!-- This is where the music rows will be dynamically added -->
+        {% if zipped_preloaded_data %}
+          {% for song in zipped_preloaded_data %}
+            <tr class="uploaded-music-row">
+              <td>{{ song[0] }}</td>
+              <td>
+                  <button class="select-button" library-song="yes" data-song="{{ song[1] }}" data-song-name="{{ song[0] }}"" onclick="upload_song(this)">Select</button>
+              </td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+    <h3>Selected Songs</h2>
+      <table id="selectedMusic">
+        <thead>
+          <tr>
+            <th>Song Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- This is where the music rows will be dynamically added -->
+          {% if zipped_song_data %}
+            {% for song in zipped_song_data %}
+            <tr class="uploaded-music-row">
+                <td>{{ song[0] }}</td>
+                <td>
+                    <button class="select-button" library-song="no" data-song="{{ song[1] }}" data-song-name="{{ song[0] }}"" onclick="get_rid_off(this)">Remove</button>
+                </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <p>{{ song_error }}</p>
+          {% endif %}
+        </tbody>
+      </table>  
+  <br>
+  <div class="input-container">
+    Image Durations (in seconds):
+    <input type="number" id="imageDuration" min="1" value="3">
+  </div>
+  <br>
+  <h2>Transition Effects</h2>
+  <select id="transitionEffect" class="transition-dropdown">
+    <option value="none">No Transition</option>
+    <option value="fade">Cross Dissolve</option>
+    <option value="slide">Fade In/Out</option>
+  </select>
+  <br>
+  <h2>Preview</h2>
+  <video id="videoPreview" controls>
+    <source src="../static/assets/vid.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <br>
+  <button onclick="previewVideo()">Update Preview</button>    
+  <button onclick="generateVideo()">Generate Video</button>
+  
+  <script src="../static/js/script.js"></script>
+  <script>
+    function get_rid_off(element) {
+      const state = element.innerHTML;
+      const formData = new FormData();
+      formData.append("song_name", element.getAttribute("data-song-name"));
+      fetch("/remove-song-from-database", {
+        method: "POST",
+        body: formData
+      })
+      var row = element.closest('tr');
+      row.remove();
+    }
+
+    function upload_song(button) {
+      var row = button.closest('tr');
+      var songName = row.querySelector('td').innerText;
+      var songContent = row.querySelector('button').getAttribute('data-song');
+      
+      // Create a new row for the selected music table
+      var newRow = document.createElement('tr');
+      var songNameCell = document.createElement('td');
+      songNameCell.textContent = songName;
+      newRow.appendChild(songNameCell);
+      
+      var buttonCell = document.createElement('td');
+      var removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.classList.add('select-button');
+      removeButton.setAttribute('data-song', songContent);
+      removeButton.setAttribute('data-song-name', songName);
+      removeButton.onclick = function() {
+        get_rid_off(this);
+        row.remove(); // Remove the row from the first table when the remove button is clicked in the second table
+      };
+      buttonCell.appendChild(removeButton);
+      newRow.appendChild(buttonCell);
+      const formData = new FormData();
+      formData.append("song_name", songName);
+      fetch("/add-song-to-database-from-library", {
+        method: "POST",
+        body: formData
+      })
+      
+      // Append the new row to the selected music table
+      document.querySelector('#selectedMusic tbody').appendChild(newRow);
+      
+      // Remove the row from the first table
+      if (button.getAttribute('library-song') === 'no') {
+        row.remove();
+      }
+    }
+  </script>
+</body>
+</html>

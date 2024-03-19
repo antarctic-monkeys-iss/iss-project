@@ -1,0 +1,11 @@
+Flask
+Flask-JWT-Extended
+Flask-MySQLdb
+PyJWT
+Werkzeug
+traceback
+datetime
+base64
+mysql.connector
+cv2
+moviepy

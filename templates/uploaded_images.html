@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded Images</title>
+</head>
+<body>
+    <h1>Uploaded Images</h1>
+
+    {% if images %}
+        <ul>
+            {% for image in images %}
+                <li>
+                    <p>Image ID: {{ image.id }}</p>
+                    <p>Uploaded at: {{ image.time_of_upload }}</p>
+                    <img src="{{ url_for('get_image', image_id=image.id) }}" alt="Uploaded Image">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No images uploaded.</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+</style>
+</head>
+<body>
+  <nav>
+    <div class="navbar">
+      <div class="navbar-brand">
+        <a href="#">
+          <img src="{{ url_for('static', filename='assets/logo.png') }}" alt="Icon">
+        </a>
+        <span>Antarctic Monkeys</span>
+      </div>
+    </div>
+  </nav>
+
+<h2 style="margin-left: 10%;">Admin Dashboard</h2>
+<table style="width: 80%; margin-left: 10%; margin-right: 10%;">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody id="userTableBody">
+    {% for user in users %}
+    <tr>
+      <td>{{ user.username }}</td>
+      <td>{{ user.email }}</td>
+    </tr>
+    {% endfor %}
+    {% if not users %}
+    <tr><td colspan='3'>No users found</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+
+</body>
+</html>

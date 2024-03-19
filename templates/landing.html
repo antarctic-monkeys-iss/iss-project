@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Online Service</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <style>
+        body {
+            font-family: 'Font2';
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        section {
+            max-width: 98%;
+            margin: 1%;
+            padding: 2%;
+            background-color: #8fc1f0;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        img {
+            max-width: 100%;
+            width: 50%; /* Adjusted width for all screens */
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px; /* Adjusted font size for all screens */
+            margin-left: 2%;
+            line-height: 1.6;
+            color: #333;
+            text-align: left;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Media query for smaller screens */
+        @media screen and (max-width: 768px) {
+            img {
+                width: 100%; /* Full width for smaller screens */
+            }
+
+            p {
+                font-size: 16px; /* Adjusted font size for smaller screens */
+            }
+
+            section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section>
+        <img src="../static/assets/logo.png" alt="Your Company Logo">
+        <div>
+            <p>
+                Turn your most cherished memories into heartwarming videos. Effortlessly create personalized videos, relive 
+                your experiences, and share the joy of these memories with loved ones.
+            </p>
+            
+            <button onclick="location.href='http://127.0.0.1:5000/login'">Login</button>
+            <button onclick="location.href='http://127.0.0.1:5000/signup'">Sign Up</button>
+        </div>
+    </section>
+
+</body>
+</html>
