@@ -15,7 +15,7 @@ import base64
 app = Flask(__name__)
 
 # Configure SQLAlchemy
-app.config['SQLALCHEMY_DATABASE_URI'] = "cockroachdb://antarctic:HBVCEcPaB0kquTdTlW8lTw@issproject-9037.8nk.gcp-asia-southeast1.cockroachlabs.cloud:26257/project?sslmode=verify-full"
+app.config['SQLALCHEMY_DATABASE_URI'] = "cockroachdb://antarctic:HBVCEcPaB0kquTdTlW8lTw@issproject-9037.8nk.gcp-asia-southeast1.cockroachlabs.cloud:26257/project?sslmode=disable"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'your_secret_key'
 
